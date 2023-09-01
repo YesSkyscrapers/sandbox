@@ -4,6 +4,8 @@ var udp = require('dgram')
 
 // creating a udp server
 var server = udp.createSocket('udp4')
+let players = []
+let id = 0
 
 // emits when any error occurs
 server.on('error', function (error) {
@@ -11,19 +13,69 @@ server.on('error', function (error) {
     server.close()
 })
 
+const broadcast = (targets) => {
+    targets.forEach((player) => {
+        try {
+            server.send(JSON.stringify(obj), player.info.port, player.info.address, function (error) {
+                if (error) {
+                    console.log(error)
+                }
+            })
+        } catch (err) {}
+    })
+}
+
+const answer = (playerId, obj) => {
+    try {
+        //sending msg
+        let player = getPlayerById(playerId)
+        server.send(JSON.stringify(obj), player.info.port, player.info.address, function (error) {
+            if (error) {
+                console.log(error)
+            }
+        })
+    } catch (err) {}
+}
+
+const getPlayerById = (id) => {
+    return players.find((i) => i.playerId == id)
+}
+
 // emits on new datagram msg
 server.on('message', function (msg, info) {
-    console.log('Data received from client : ' + msg.toString())
-    console.log('Received %d bytes from %s:%d\n', msg.length, info.address, info.port, info)
+    try {
+        let data = JSON.parse(msg.toString())
 
-    //sending msg
-    server.send(msg, info.port, info.address, function (error) {
-        if (error) {
-            client.close()
-        } else {
-            console.log('Data sent !!!')
+        switch (data.action) {
+            case 'registration': {
+                let newPlayerId = id
+                id = id + 1
+
+                players.push({
+                    playerId: newPlayerId,
+                    info,
+                    pos: {
+                        x: 0,
+                        y: 0
+                    }
+                })
+
+                answer(newPlayerId, {
+                    action: 'registrationEnd',
+                    payload: newPlayerId
+                })
+            }
+            case 'updatePos': {
+                let player = getPlayerById(data.playerId)
+
+                player.pos = {
+                    ...data.payload
+                }
+
+                broadcast(players.filter((_player) => _player.playerId != player.playerId))
+            }
         }
-    })
+    } catch (err) {}
 })
 
 //emits when socket is ready and listening for datagram msgs
@@ -42,7 +94,7 @@ server.on('close', function () {
     console.log('Socket is closed !')
 })
 
-server.bind(3333, '89.223.71.181')
+server.bind(3333, '127.0.0.1') //'89.223.71.181')
 
 setTimeout(function () {
     server.close()
