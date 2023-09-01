@@ -57,7 +57,8 @@ server.on('message', function (msg, info) {
                     info,
                     pos: {
                         x: 0,
-                        y: 0
+                        y: 0,
+                        z: 0
                     }
                 })
 
@@ -72,7 +73,7 @@ server.on('message', function (msg, info) {
                 player.pos = {
                     ...data.payload
                 }
-
+                console.log(data.payload)
                 broadcast(players.filter((_player) => _player.playerId != player.playerId))
             }
         }
