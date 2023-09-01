@@ -46,7 +46,7 @@ const getPlayerById = (id) => {
 server.on('message', function (msg, info) {
     try {
         let data = JSON.parse(msg.toString())
-
+        console.log(data)
         switch (data.action) {
             case 'registration': {
                 let newPlayerId = id
@@ -77,7 +77,9 @@ server.on('message', function (msg, info) {
                 broadcast(players.filter((_player) => _player.playerId != player.playerId))
             }
         }
-    } catch (err) {}
+    } catch (err) {
+        console.log(err)
+    }
 })
 
 //emits when socket is ready and listening for datagram msgs
