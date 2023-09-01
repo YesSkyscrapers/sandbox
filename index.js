@@ -1,4 +1,5 @@
 var udp = require('dgram')
+const { argv } = require('process')
 
 // --------------------creating a udp server --------------------
 
@@ -94,7 +95,7 @@ server.on('close', function () {
     console.log('Socket is closed !')
 })
 
-server.bind(3333, '127.0.0.1') //'89.223.71.181')
+server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
 
 setTimeout(function () {
     server.close()
