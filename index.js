@@ -74,6 +74,11 @@ server.on('message', function (msg, info) {
                     ...data.payload
                 }
                 console.log(data.payload)
+                console.log('current players', players)
+                console.log(
+                    'sending to',
+                    players.filter((_player) => _player.playerId != player.playerId).map((i) => i.playerId)
+                )
                 broadcast(
                     players.filter((_player) => _player.playerId != player.playerId),
                     {
@@ -108,7 +113,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2004, '89.223.71.181')
+server.bind(2005, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
