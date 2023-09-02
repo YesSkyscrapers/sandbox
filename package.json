@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "dgram": "^1.0.1"
+        "dgram": "^1.0.1",
+        "moment": "^2.29.4"
     }
 }
