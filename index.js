@@ -83,9 +83,19 @@ server.on('message', function (msg, info) {
                     break
                 }
 
-                player.pos = {
-                    ...data.payload
-                }
+                players = players.map((_player) => {
+                    if (_player.playerId == player.playerId) {
+                        return {
+                            ..._player,
+                            pos: {
+                                ...data.payload
+                            }
+                        }
+                    } else {
+                        return _player
+                    }
+                })
+
                 console.log(data.payload)
                 console.log(
                     'sending to',
@@ -133,7 +143,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2012, '89.223.71.181')
+server.bind(2013, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
