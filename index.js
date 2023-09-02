@@ -73,6 +73,12 @@ server.on('message', function (msg, info) {
                 })
                 break
             }
+            case 'ping': {
+                answer(newPlayerId, {
+                    action: 'pingAnswer'
+                })
+                break
+            }
             case 'updatePos': {
                 let player = getPlayerById(data.playerId)
                 if (!player) {
@@ -143,7 +149,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2013, '89.223.71.181')
+server.bind(2014, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
