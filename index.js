@@ -22,7 +22,9 @@ const broadcast = (targets, obj) => {
                     console.log(error)
                 }
             })
-        } catch (err) {}
+        } catch (err) {
+            console.log(err)
+        }
     })
 }
 
@@ -120,7 +122,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2009, '89.223.71.181')
+server.bind(2010, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
