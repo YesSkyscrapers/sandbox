@@ -15,11 +15,15 @@ server.on('error', function (error) {
 })
 
 const broadcast = (targets, obj) => {
+    console.log(targets)
     targets.forEach((player) => {
         try {
+            console.log('sending to raw, ', JSON.stringify(obj), player)
             server.send(JSON.stringify(obj), player.info.port, player.info.address, function (error) {
                 if (error) {
                     console.log(error)
+                } else {
+                    console.log('smth callback')
                 }
             })
         } catch (err) {
@@ -85,7 +89,14 @@ server.on('message', function (msg, info) {
                 console.log(data.payload)
                 console.log(
                     'sending to',
-                    players.filter((_player) => _player.playerId != player.playerId).map((i) => i.playerId)
+                    players.filter((_player) => _player.playerId != player.playerId).map((i) => i.playerId),
+                    {
+                        action: 'movePos',
+                        payload: players.map((_player) => ({
+                            playerId: _player.playerId,
+                            pos: _player.pos
+                        }))
+                    }
                 )
                 broadcast(
                     players.filter((_player) => _player.playerId != player.playerId),
@@ -122,7 +133,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2010, '89.223.71.181')
+server.bind(2011, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
