@@ -33,15 +33,22 @@ const broadcast = (targets, obj) => {
 }
 
 const answer = (playerId, obj) => {
-    try {
-        //sending msg
-        let player = getPlayerById(playerId)
-        server.send(JSON.stringify(obj), player.info.port, player.info.address, function (error) {
-            if (error) {
-                console.log(error)
-            }
-        })
-    } catch (err) {}
+    return new Promise((resolve, reject) => {
+        try {
+            //sending msg
+            let player = getPlayerById(playerId)
+            server.send(JSON.stringify(obj), player.info.port, player.info.address, function (error) {
+                if (error) {
+                    console.log(error)
+                    reject(error)
+                } else {
+                    resolve()
+                }
+            })
+        } catch (err) {
+            reject(err)
+        }
+    })
 }
 
 const getPlayerById = (id) => {
@@ -50,6 +57,7 @@ const getPlayerById = (id) => {
 
 // emits on new datagram msg
 server.on('message', function (msg, info) {
+    console.log(moment().format(), 'come')
     try {
         let data = JSON.parse(msg.toString())
         switch (data.action) {
@@ -76,6 +84,8 @@ server.on('message', function (msg, info) {
             case 'ping': {
                 answer(data.playerId, {
                     action: 'pingAnswer'
+                }).finally(() => {
+                    console.log(moment().format(), 'exit')
                 })
                 break
             }
@@ -149,7 +159,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2017, '89.223.71.181')
+server.bind(2018, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
