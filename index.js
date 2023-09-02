@@ -6,7 +6,7 @@ const { argv } = require('process')
 // creating a udp server
 var server = udp.createSocket('udp4')
 let players = []
-let id = 0
+let id = 1
 
 // emits when any error occurs
 server.on('error', function (error) {
@@ -122,7 +122,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2007, '89.223.71.181')
+server.bind(2008, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
