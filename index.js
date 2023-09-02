@@ -73,7 +73,7 @@ server.on('message', function (msg, info) {
                 if (!player) {
                     console.log('player not found')
                     console.log('current players', players)
-                    console.log('data.playerId', data.playerId)
+                    console.log('data.playerId', data)
 
                     break
                 }
@@ -122,7 +122,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2006, '89.223.71.181')
+server.bind(2007, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
