@@ -58,7 +58,7 @@ const getPlayerById = (id) => {
 
 // emits on new datagram msg
 server.on('message', function (msg, info) {
-    console.log(moment().format(), 'come')
+    console.log(moment().format('YYYY-MM-DDTHH:mm:ss.SSS'), 'come')
     try {
         let data = JSON.parse(msg.toString())
         switch (data.action) {
@@ -86,7 +86,7 @@ server.on('message', function (msg, info) {
                 answer(data.playerId, {
                     action: 'pingAnswer'
                 }).finally(() => {
-                    console.log(moment().format(), 'exit')
+                    console.log(moment('YYYY-MM-DDTHH:mm:ss.SSS').format(), 'exit')
                 })
                 break
             }
@@ -160,7 +160,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2019, '89.223.71.181')
+server.bind(2020, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
