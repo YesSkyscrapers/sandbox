@@ -39,7 +39,7 @@ const answer = (playerId, obj) => {
 }
 
 const getPlayerById = (id) => {
-    return players.find((i) => i.playerId == id)
+    return players.find((i) => Number(i.playerId) == Number(id))
 }
 
 // emits on new datagram msg
@@ -66,9 +66,17 @@ server.on('message', function (msg, info) {
                     action: 'registrationEnd',
                     payload: newPlayerId
                 })
+                break
             }
             case 'updatePos': {
                 let player = getPlayerById(data.playerId)
+                if (!player) {
+                    console.log('player not found')
+                    console.log('current players', players)
+                    console.log('data.playerId', data.playerId)
+
+                    break
+                }
 
                 player.pos = {
                     ...data.payload
@@ -89,6 +97,7 @@ server.on('message', function (msg, info) {
                         }))
                     }
                 )
+                break
             }
         }
     } catch (err) {
@@ -102,7 +111,7 @@ server.on('listening', function () {
     var port = address.port
     var family = address.family
     var ipaddr = address.address
-    console.log('Server is listening at port' + port)
+    console.log('Server is started at port' + port)
     console.log('Server ip :' + ipaddr)
     console.log('Server is IP4/IP6 : ' + family)
 })
@@ -113,7 +122,7 @@ server.on('close', function () {
 })
 
 //server.bind(argv.find((i) => i.includes('port')).slice('-port:'.length), '127.0.0.1') //'89.223.71.181')
-server.bind(2005, '89.223.71.181')
+server.bind(2006, '89.223.71.181')
 
 setTimeout(function () {
     server.close()
